@@ -44,7 +44,7 @@ object Compressor {
         val mediaMetadataRetriever = MediaMetadataRetriever()
         try {
             mediaMetadataRetriever.setDataSource(source)
-        } catch (exception: IllegalArgumentException) {
+        } catch (exception: Exception) {
             return Result(
                 success = false,
                 failureMessage = "Source path: $source can be invalid! or you don't have READ_EXTERNAL_STORAGE permission"
@@ -436,7 +436,10 @@ object Compressor {
                 }
                 extractor.release()
                 try {
-                    mediaMuxer.finishMovie()
+                    if (noExceptions) {
+                        mediaMuxer.finishMovie()
+                        return Result(success = true, failureMessage = null)
+                    }
                 } catch (e: Exception) {
                     printException(e)
                 }
@@ -445,7 +448,6 @@ object Compressor {
                 printException(exception)
             }
 
-            return Result(success = true, failureMessage = null)
         }
 
         return Result(success = false, failureMessage = "Something went wrong, please try again")

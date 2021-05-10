@@ -68,20 +68,25 @@ object VideoCompressor : CoroutineScope by MainScope() {
     ) = launch {
         isRunning = true
         listener.onStart()
-        val result = startCompression(
-            srcPath,
-            destPath,
-            quality,
-            isMinBitRateEnabled,
-            keepOriginalResolution,
-            listener,
-        )
 
-        // Runs in Main(UI) Thread
-        if (result.success) {
-            listener.onSuccess()
-        } else {
-            listener.onFailure(result.failureMessage ?: "An error has occurred!")
+        try {
+            val result = startCompression(
+                srcPath,
+                destPath,
+                quality,
+                isMinBitRateEnabled,
+                keepOriginalResolution,
+                listener,
+            )
+
+            // Runs in Main(UI) Thread
+            if (result.success) {
+                listener.onSuccess()
+            } else {
+                listener.onFailure(result.failureMessage ?: "An error has occurred!")
+            }
+        } catch (exception: Exception) {
+            listener.onFailure(exception.message ?: "An error has occurred!")
         }
 
     }
