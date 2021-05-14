@@ -478,6 +478,7 @@ object Compressor {
             VideoQuality.MEDIUM -> (bitrate * 0.2).roundToInt()
             VideoQuality.HIGH -> (bitrate * 0.3).roundToInt()
             VideoQuality.VERY_HIGH -> (bitrate * 0.5).roundToInt()
+            VideoQuality.SAME -> (bitrate * 1.0).roundToInt()
         }
     }
 
